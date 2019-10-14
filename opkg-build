@@ -45,10 +45,16 @@ disallowed_field() {
 
 pkg_appears_sane() {
 	local pkg_dir=$1
-
+	echo "pkg_dir : $pkg_dir"
 	local owd=`pwd`
+	
+	for entry in "$pkg_dir"/*
+	do
+	  echo "$entry"
+	done
+	
 	cd $pkg_dir
-
+	
 	PKG_ERROR=0
 
 	tilde_files=`find . -name '*~' -ls -printf '\\\n'`
@@ -107,8 +113,8 @@ You probably want to chown these to a system user: " >&2
 	disallowed_filename=`disallowed_field Filename`
 	[ "$?" -ne 0 ] && PKG_ERROR=1
 
-	if echo $pkg_dir | grep '[^a-z0-9.+-]'; then
-		echo "*** Error: Package name $pkg_dir contains illegal characters, (other than [a-z0-9.+-])" >&2
+	if echo $pkg | grep '[^a-z0-9.+-]'; then
+		echo "*** Error: Package name $pkg contains illegal characters, (other than [a-z0-9.+-])" >&2
 		PKG_ERROR=1;
 	fi
 
